@@ -8,26 +8,34 @@ public class UserKey
 {
     @ManyToOne(targetEntity = User.class,cascade= CascadeType.ALL)
     @JoinColumn(name = "sender",referencedColumnName = "userId")
-    private Long sender;
+    private User sender;
 
-    public Long getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(Long sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 
-    public Long getReceiver() {
+    public User getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(Long receiver) {
+    public UserKey() {
+    }
+
+    public UserKey(User sender, User receiver) {
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
+    public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
 
     @ManyToOne(targetEntity = User.class,cascade= CascadeType.ALL)
     @JoinColumn(name = "receiver",referencedColumnName = "userId")
-    private Long receiver;
+    private User receiver;
 
 }

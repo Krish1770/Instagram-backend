@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import org.springframework.http.HttpStatus;
 
 @Entity
-@Table(name = "relationList")
+@Table(name = "relation_list")
 public class Relation {
     @EmbeddedId
     private UserKey userKey;
@@ -19,6 +19,12 @@ public class Relation {
 
     public UserKey getUserKey() {
         return userKey;
+    }
+
+    public Relation(UserKey userKey, String status, boolean following) {
+        this.userKey = userKey;
+        this.status = status;
+        this.following = following;
     }
 
     public void setUserKey(UserKey userKey) {
@@ -45,8 +51,7 @@ public class Relation {
 
     private boolean following;
 
-    public void setUserKey(Long sender, Long receiver) {
-        userKey.setSender(sender );
-        userKey.setReceiver(receiver);
+    public void setUserKey(User sender, User receiver) {
+        this.userKey = new UserKey(sender, receiver);
     }
 }
