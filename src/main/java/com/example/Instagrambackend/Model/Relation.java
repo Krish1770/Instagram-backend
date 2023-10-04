@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 public class Relation {
     @EmbeddedId
     private UserKey userKey;
+    private String status;
+
+    private boolean following;
 
     public Relation(HttpStatus httpStatus, String s, String s1) {
     }
@@ -17,14 +20,14 @@ public class Relation {
 
     }
 
-    public UserKey getUserKey() {
-        return userKey;
-    }
-
     public Relation(UserKey userKey, String status, boolean following) {
         this.userKey = userKey;
         this.status = status;
         this.following = following;
+    }
+
+    public UserKey getUserKey() {
+        return userKey;
     }
 
     public void setUserKey(UserKey userKey) {
@@ -47,9 +50,7 @@ public class Relation {
         this.following = following;
     }
 
-    private String status;
 
-    private boolean following;
 
     public void setUserKey(User sender, User receiver) {
         this.userKey = new UserKey(sender, receiver);

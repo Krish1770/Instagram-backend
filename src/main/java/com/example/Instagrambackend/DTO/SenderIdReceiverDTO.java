@@ -3,9 +3,21 @@ package com.example.Instagrambackend.DTO;
 
 public class SenderIdReceiverDTO {
 
+
     private Long sender;
 
     private Long receiver;
+
+    private String action;
+
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
 
     public Long getSender() {
         return sender;

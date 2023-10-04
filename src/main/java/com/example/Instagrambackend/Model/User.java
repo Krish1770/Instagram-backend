@@ -14,13 +14,7 @@ public class User  {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long userId;
 
-    public String getRole() {
-        return Role;
-    }
-
-    public void setRole(String role) {
-        Role = role;
-    }
+   private String accountType;
 
     private String Role;
     private String firstName;
@@ -32,16 +26,33 @@ public class User  {
      private String emailId;
 
      private String mobileNumber;
+    private Boolean isActive;
 
     public User(HttpStatus httpStatus, String userAddedSuccessfully, User user) {
     }
 
     public User(HttpStatus httpStatus, String emailAlreadyExist, String s) {
     }
-
     public User() {
 
     }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public String getRole() {
+        return Role;
+    }
+
+    public void setRole(String role) {
+        Role = role;
+    }
+
 
 
     public Long getUserId() {
@@ -90,5 +101,28 @@ public class User  {
 
     public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", Role='" + Role + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", emailId='" + emailId + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", isActive=" + isActive +
+                '}';
     }
 }
