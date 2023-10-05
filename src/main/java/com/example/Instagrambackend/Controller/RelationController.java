@@ -49,7 +49,7 @@ public class RelationController {
                 }
             }
             else
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,result+"not found",""));
+             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,result+"not found",""));
 
 
         }
@@ -112,7 +112,6 @@ public class RelationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK," user not found",""));
 
     }
-
     @GetMapping("/FollowerList/{userId}")
     public ResponseEntity<ResponseDTO>followersList(@PathVariable Long userId)
     {
@@ -121,5 +120,4 @@ public class RelationController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK," user not found",""));
     }
-
 }
