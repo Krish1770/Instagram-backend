@@ -80,4 +80,5 @@ public class Feed {
     public void setPrivacyType(String privacyType) {
         this.privacyType = privacyType;
     }
+
 }

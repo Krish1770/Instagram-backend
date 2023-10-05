@@ -9,6 +9,7 @@ import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Repository.FeedRepository;
 import com.example.Instagrambackend.Repository.MediaRepository;
 import com.example.Instagrambackend.Repository.RelationRepository;
+import com.example.Instagrambackend.Repository.Service.FeedRepoService;
 import com.example.Instagrambackend.Repository.UserRepository;
 import com.example.Instagrambackend.Service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import java.util.Optional;
 public class FeedServiceImpl implements FeedService {
 
     @Autowired
-    private FeedRepository feedRepository;
+    private FeedRepoService feedRepoService;
 
     @Autowired
     private MediaRepository mediaRepository;
@@ -61,7 +62,7 @@ public class FeedServiceImpl implements FeedService {
         newFeed.setMedia(media);
         User newUser=userRepository.findById(feedDTO.getUser()).get();
         newFeed.setUserId(newUser);
-        System.out.println(feedRepository.save(newFeed));
+        System.out.println(feedRepoService.save(newFeed));
 
 
 
@@ -73,11 +74,11 @@ public class FeedServiceImpl implements FeedService {
     }
 
     public ResponseEntity<ResponseDTO> FeedArchiving(Boolean ArchiveFlag,Long feedId) {
-  Feed newFeed=feedRepository.findById(feedId).get();
+  Feed newFeed=feedRepoService.findById(feedId).get();
 
   if(ArchiveFlag!=newFeed.isArchived()) {
       newFeed.setArchived(ArchiveFlag);
-      feedRepository.save(newFeed);
+      feedRepoService.save(newFeed);
       if(ArchiveFlag)
       return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"post has been archived",""));
     else
@@ -101,7 +102,7 @@ public class FeedServiceImpl implements FeedService {
         User newUser = new User();
         newUser.setUserId(user);
 
-        List<Feed> publicFeeds = feedRepository.findAllByPrivacyTypeAndIsArchivedAndAndUserIdAccountTypeOrderByUploadDate("public",false,"public");
+        List<Feed> publicFeeds = feedRepoService.findAllByPrivacyTypeAndIsArchivedAndAndUserIdAccountTypeOrderByUploadDate("public",false,"public");
         
 
 
@@ -141,7 +142,7 @@ public class FeedServiceImpl implements FeedService {
                  System.out.println(receiverId);
                  tempUser.setUserId(receiverId);
 
-                 List<Feed> tempfeed = feedRepository.findAllByUserIdUserIdAndIsArchived(receiverId,false);
+                 List<Feed> tempfeed = feedRepoService.findAllByUserIdUserIdAndIsArchived(receiverId,false);
 
                  System.out.println(tempfeed.isEmpty());
                  feed.addAll(tempfeed);
