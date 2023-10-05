@@ -2,8 +2,7 @@ package com.example.Instagrambackend.Controller;
 
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.DTO.SenderIdReceiverDTO;
-import com.example.Instagrambackend.Model.Relation;
-import com.example.Instagrambackend.Model.User;
+import com.example.Instagrambackend.Service.Impl.RelationServiceImpl;
 import com.example.Instagrambackend.Service.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,15 +15,15 @@ import org.springframework.web.bind.annotation.*;
 public class RelationController {
 
     @Autowired
-    private RelationService relationService;
+    private RelationService relationservice;
 
 
-    @PostMapping("/followRequest")
-    public ResponseEntity<ResponseDTO> followRequest(@RequestBody SenderIdReceiverDTO senderReceiverDTO)
+
+    public ResponseEntity<ResponseDTO> followRequest( SenderIdReceiverDTO senderReceiverDTO)
     {
-        String result=relationService.isUsersValid(senderReceiverDTO.getSender(),senderReceiverDTO.getReceiver());
-        if(relationService.isUserValid(senderReceiverDTO.getReceiver())) {
-            Boolean isReceiverPublic = relationService.isReceiverPublic(senderReceiverDTO.getReceiver());
+        String result= relationservice.isUsersValid(senderReceiverDTO.getSender(),senderReceiverDTO.getReceiver());
+        if(relationservice.isUserValid(senderReceiverDTO.getReceiver())) {
+            Boolean isReceiverPublic = relationservice.isReceiverPublic(senderReceiverDTO.getReceiver());
             senderReceiverDTO.setAction("follow");
             System.out.println("asdfgh" + isReceiverPublic);
             String request = senderReceiverDTO.getRequest();
@@ -33,19 +32,19 @@ public class RelationController {
                 if (!isReceiverPublic) {
                     if (request.equals("request")) {
                         System.out.println("werty");
-                      return  relationService.actionRequest(senderReceiverDTO);
+                      return  relationservice.actionRequest(senderReceiverDTO);
                     } else if (request.equals("accept")) {
-                       return relationService.actionAccept(senderReceiverDTO);
+                       return relationservice.actionAccept(senderReceiverDTO);
                     } else if (request.equals("deny")) {
-                     return   relationService.actionDenied(senderReceiverDTO);
+                     return   relationservice.actionDenied(senderReceiverDTO);
 
                     } else if (request.equals("remove")) {
-                      return  relationService.actionRemove(senderReceiverDTO);
+                      return  relationservice.actionRemove(senderReceiverDTO);
                     } else {
                         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND, "request not found", ""));
                     }
                 } else {
-                    return relationService.followRequest(senderReceiverDTO);
+                    return relationservice.followRequest(senderReceiverDTO);
                 }
             }
             else
@@ -64,24 +63,24 @@ public class RelationController {
 
     }
 
-    @PutMapping("/unFollowRequest")
-    public  ResponseEntity<ResponseDTO> unFollow(@RequestBody SenderIdReceiverDTO senderReceiverDTO)
+
+    public  ResponseEntity<ResponseDTO> unFollow( SenderIdReceiverDTO senderReceiverDTO)
     {
-        String result=relationService.isUsersValid(senderReceiverDTO.getSender(),senderReceiverDTO.getReceiver());
+        String result= relationservice.isUsersValid(senderReceiverDTO.getSender(),senderReceiverDTO.getReceiver());
         if(!result.equals(""))
         {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,result+"not found",""));
         }
-        return relationService.unFollow(senderReceiverDTO);
+        return relationservice.unFollow(senderReceiverDTO);
 
     }
 
-    @PostMapping("/FriendRequest")
-    public  ResponseEntity<ResponseDTO> FriendRequest(@RequestBody SenderIdReceiverDTO senderReceiverDTO)
+
+    public  ResponseEntity<ResponseDTO> FriendRequest( SenderIdReceiverDTO senderReceiverDTO)
     {
         String request= senderReceiverDTO.getRequest();
         senderReceiverDTO.setAction("friend");
-        String result=relationService.isUsersValid(senderReceiverDTO.getSender(),senderReceiverDTO.getReceiver());
+        String result= relationservice.isUsersValid(senderReceiverDTO.getSender(),senderReceiverDTO.getReceiver());
         if(!result.equals(""))
         {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,result+"not found",""));
@@ -90,33 +89,33 @@ public class RelationController {
         if(request.equals("request"))  //requesting
         {
 
-            return relationService.actionRequest(senderReceiverDTO);
+            return relationservice.actionRequest(senderReceiverDTO);
         }
 
         else if(request.equals("accept"))  //accepting the request
-            return relationService.actionAccept(senderReceiverDTO);
+            return relationservice.actionAccept(senderReceiverDTO);
 
         else if(request.equals("deny")) //denying the request
-            return relationService.actionDenied(senderReceiverDTO);
+            return relationservice.actionDenied(senderReceiverDTO);
 
-        else return relationService.actionRemove(senderReceiverDTO);
+        else return relationservice.actionRemove(senderReceiverDTO);
     }
 
-    @GetMapping("/FriendList/{userId}")
-    public ResponseEntity<ResponseDTO>friendsList(@PathVariable  Long userId)
+
+    public ResponseEntity<ResponseDTO>friendsList(  Long userId)
     {
-        if(relationService.isUserValid(userId)) {
-            return relationService.friendsList(userId);
+        if(relationservice.isUserValid(userId)) {
+            return relationservice.friendsList(userId);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK," user not found",""));
 
     }
-    @GetMapping("/FollowerList/{userId}")
-    public ResponseEntity<ResponseDTO>followersList(@PathVariable Long userId)
+
+    public ResponseEntity<ResponseDTO>followersList( Long userId)
     {
-        if(relationService.isUserValid(userId)) {
-            return relationService.followersList(userId);
+        if(relationservice.isUserValid(userId)) {
+            return relationservice.followersList(userId);
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK," user not found",""));
     }

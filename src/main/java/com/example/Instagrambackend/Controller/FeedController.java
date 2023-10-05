@@ -1,8 +1,10 @@
 package com.example.Instagrambackend.Controller;
 
+import com.example.Instagrambackend.Api.FeedControllerApi;
 import com.example.Instagrambackend.DTO.FeedDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Service.FeedService;
+import com.example.Instagrambackend.Service.Impl.FeedServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,14 +16,14 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
-
-public class FeedController {
+public class FeedController implements FeedControllerApi {
 
     @Autowired
     private FeedService feedService;
 
 
-    @PostMapping("/upload/file") //whether video or image
+
+    //whether video or image
     public ResponseEntity<ResponseDTO> mediaUpload(@RequestBody MultipartFile file, @RequestHeader Map<String,String> header) throws Exception {
         System.out.println(header);
 
@@ -36,14 +38,13 @@ public class FeedController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"user not found",""));
     }
 
-    @PutMapping(value = "/upload/{feedId}/{ArchiveFlag}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResponseDTO> FeedArchiving(@PathVariable Boolean ArchiveFlag, @PathVariable Long feedId)
+     public ResponseEntity<ResponseDTO> FeedArchiving( Boolean ArchiveFlag,  Long feedId)
     {
         return  feedService.FeedArchiving(ArchiveFlag,feedId);
     }
 
-    @GetMapping("/view/{userId}/{feedType}")
-    public ResponseEntity<ResponseDTO> getFeed(@PathVariable Map<String,String>feedDetails) throws IOException {
+
+    public ResponseEntity<ResponseDTO> getFeed( Map<String,String>feedDetails) throws IOException {
         System.out.println("dsfgsssdvb");
         Long userId=Long.parseLong(feedDetails.get("userId"));
         String feedType=feedDetails.get("feedType");
