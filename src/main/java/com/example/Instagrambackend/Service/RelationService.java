@@ -33,13 +33,14 @@ public class RelationService {
         if (!sender) {
             temp += userId1;
 
-            if (!receiver) {
-                temp += "and";
-                temp += userId2;
-            }
-            return temp;
-
         }
+        if(!receiver)
+        {
+            temp+="";
+            temp+=userId2;
+        }
+        if(!temp.isEmpty())
+            return temp;
         return "";
     }
 
@@ -56,6 +57,7 @@ public class RelationService {
 
         if (byUserKeySenderUserIdAndUserKeyReceiverUserId.isPresent() && !(byUserKeySenderUserIdAndUserKeyReceiverUserId.get().getFollowing())) {
             byUserKeySenderUserIdAndUserKeyReceiverUserId.get().setFollowing(true);
+            byUserKeySenderUserIdAndUserKeyReceiverUserId.get().setFollowingRequest("accepted");
             relationRepository.save(byUserKeySenderUserIdAndUserKeyReceiverUserId.get());
             System.out.println("doneeeeeeeeeeee");
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, (senderReceiverDTO.getSender() +
@@ -99,27 +101,40 @@ public class RelationService {
 
     public ResponseEntity<ResponseDTO> actionRequest(SenderIdReceiverDTO senderReceiverDTO) {
         Optional<Relation> tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
-
+  String action=senderReceiverDTO.getAction();
+        System.out.println("requestService");
         if (tempRelation == null) {
             tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getReceiver(), senderReceiverDTO.getSender());
 
         }
         if (tempRelation.isPresent()) {
-//            try {
-                if (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested")) {
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "friend request " +
+//
+            if((action.equals("follow") && (tempRelation.get().getFollowingRequest()!=null && tempRelation.get().getFollowingRequest().equals("requested")))
+            || (action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested"))))
+            {
+              return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " request " +
                             "already sent", senderReceiverDTO));
-                } else if (tempRelation.get().getStatus()!=null&&tempRelation.get().getStatus().equals("accepted")) {
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " already a" +
-                            "friend", senderReceiverDTO));
+
+                } else if ((action.equals("follow") && (tempRelation.get().getFollowingRequest()!=null && tempRelation.get().getFollowingRequest().equals("accepted")))
+
+                    || (action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("accepted"))))
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " already a" +
+                            action, senderReceiverDTO));
                 } else {
-                    System.out.println("relation present");
-                    tempRelation.get().setStatus("requested");
-                    Relation newRelation = tempRelation.get();
-                    relationRepository.save(newRelation);
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " request" +
-                            "sent", newRelation));
-                }
+            System.out.println("relation present");
+            if (action.equals("friend"))
+                tempRelation.get().setStatus("requested");
+
+            else
+                tempRelation.get().setFollowingRequest("accepted");
+            Relation newRelation = tempRelation.get();
+            relationRepository.save(newRelation);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " request" +
+
+                    "sent", newRelation));
+        }
+
             }
 //            catch (Exception e) {
 
@@ -132,7 +147,11 @@ public class RelationService {
 
             newRelation.setUserKey(userRepository.findById(senderReceiverDTO.getSender()).get()
                     , userRepository.findById(senderReceiverDTO.getReceiver()).get());
-            newRelation.setStatus("requested");
+
+            if(action.equals("friend"))
+             newRelation.setStatus("requested");
+            else
+                newRelation.setFollowingRequest("requested");
             relationRepository.save(newRelation);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " request" +
                     "sent", newRelation));
@@ -143,27 +162,44 @@ public class RelationService {
     public ResponseEntity<ResponseDTO> actionAccept(SenderIdReceiverDTO senderReceiverDTO) {
         Optional<Relation> tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
 
+         int resultFlag=0;
+        String action=senderReceiverDTO.getAction();
+        System.out.println(action);
         if (tempRelation.isPresent()) {
-//            try {
-                if (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested")) {
-                    tempRelation.get().setStatus("accepted");
-                    Relation newRelation=tempRelation.get();
-                 relationRepository.save(newRelation);
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "friend request " +
-                            "accepted", senderReceiverDTO));
-                } else if (tempRelation.get().getStatus()!=null&&tempRelation.get().getStatus().equals("accepted")) {
+
+                 if((action.equals("follow") && (tempRelation.get().getFollowingRequest()!=null && tempRelation.get().getFollowingRequest().equals("requested"))))
+                    {
+                        tempRelation.get().setFollowingRequest("accepted");
+                        Relation newRelation=tempRelation.get();
+                        relationRepository.save(newRelation);
+                        resultFlag=1;
+                    }
+            else if(action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested")))
+            {
+
+                tempRelation.get().setStatus("accepted");
+                tempRelation.get().setFollowing(true);
+                resultFlag=1;
+
+                }
+            else if((action.equals("follow") && (tempRelation.get().getFollowingRequest()!=null && tempRelation.get().getFollowingRequest().equals("accepted")))
+            || (action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("accepted"))))
+            {
                     return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " already a" +
-                            "friend", senderReceiverDTO));
+                            action, senderReceiverDTO));
                 } else {
 
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "  friend request not" +
+                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, action+" not" +
                             "sent", ""));
 
                 }
-//            } catch (Exception e) {
-//
-//            }
-//            return null;
+
+            if(resultFlag==1)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, action+" request " +
+                        "accepted", senderReceiverDTO));
+            }
+
 
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "Relation not found"
@@ -173,57 +209,86 @@ public class RelationService {
     public ResponseEntity<ResponseDTO> actionDenied(SenderIdReceiverDTO senderReceiverDTO) {
 
         Optional<Relation> tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
+  String action=senderReceiverDTO.getAction();
 
+  int resultFlag=0;
         if (tempRelation.isPresent()) {
-//            try {
-                if (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested")) {
-                    tempRelation.get().setStatus("denied");
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "friend request " +
-                            "denied", senderReceiverDTO));
-                } else if (tempRelation.get().getStatus().equals("accepted")) {
+//
+            if((action.equals("follow") && (tempRelation.get().getFollowingRequest()!=null && tempRelation.get().getFollowingRequest().equals("requested"))))
+            {
+                tempRelation.get().setFollowingRequest("denied");
+                resultFlag=1;
+
+            }
+            else if(action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested")))
+            {
+
+                tempRelation.get().setStatus("denied");
+
+                Relation newRelation=tempRelation.get();
+                relationRepository.save(newRelation);
+                resultFlag=1;
+
+            }
+
+              else if((action.equals("follow") && (tempRelation.get().getFollowingRequest()!=null && tempRelation.get().getFollowingRequest().equals("accepted")))
+                    || (action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("accepted"))))
+            {
                     return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " already a" +
-                            "friend", senderReceiverDTO));
+                            action, senderReceiverDTO));
                 } else {
 
                     return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "  already they are not a friends"
                             , ""));
 
                 }
-//            } catch (Exception e) {
 //
-//            }
-//            return null;
+
 
 
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "  already they are not a friends"
+        if(resultFlag==1)
+           return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, action+" request " +
+                "denied", senderReceiverDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "no request is sent to deny"
                 , ""));
     }
 
     public ResponseEntity<ResponseDTO> actionRemove(SenderIdReceiverDTO senderReceiverDTO) {
         Optional<Relation> tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
 
+        String action=senderReceiverDTO.getAction();
+
+
         if (tempRelation.isPresent()) {
 
+                 if((action.equals("follow") && (tempRelation.get().getFollowingRequest()!=null && tempRelation.get().getFollowingRequest().equals("requested")))
+                    || (action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested")))) {
+                     return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "relation doesn't exist " +
+                             "to remove ", senderReceiverDTO));
+                 }
 
-                if (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested")) {
-
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " You are not " +
-                            " friends either", senderReceiverDTO));
-                } else if (tempRelation.get().getStatus()!=null&&tempRelation.get().getStatus().equals("accepted")) {
+                else if((action.equals("follow") && (tempRelation.get().getFollowingRequest()!=null && tempRelation.get().getFollowingRequest().equals("accepted"))))
+                    {
+                        tempRelation.get().setFollowingRequest("removed");
+                        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "removed from follow"
+                                , senderReceiverDTO));
+                    }
+            else if(action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("removed")))
+            {
                     tempRelation.get().setStatus("removed");
                     return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "removed from friend's" +
                             "list", senderReceiverDTO));
                 } else {
 
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "  already they are not a friends"
+                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "  already not a relation"
                             , ""));
 
                 }
 
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "  already not a friends"
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "  already not a relation"
                 , ""));
 
 

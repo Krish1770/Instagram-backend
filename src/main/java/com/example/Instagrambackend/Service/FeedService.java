@@ -99,15 +99,10 @@ public class FeedService {
     public ResponseEntity<ResponseDTO> getPublicFeed( Long user) throws IOException {
         User newUser = new User();
         newUser.setUserId(user);
-//        List<Feed> feeds=feedRepository.findAllByUserId(newUser);
 
         List<Feed> publicFeeds = feedRepository.findAllByPrivacyTypeAndIsArchivedAndAndUserIdAccountTypeOrderByUploadDate("public",false,"public");
+        
 
-//        List<Media>
-//        for (feeds i : publicFeeds)
-//        {
-//
-//        }
 
         List<ByteArrayInputStream> imageBytesList = new ArrayList<>();
         List<File> files = new ArrayList<>();
@@ -115,18 +110,7 @@ public class FeedService {
 
 
 
-//        for(Feed i:publicFeeds)
-//        {
-//            if(!i.isArchived()) {
-//                ByteArrayInputStream sample = new ByteArrayInputStream((i.getMedia().getData()));
-//                BufferedImage bImage2 = ImageIO.read(sample);
-//                MultipartFile file = null;
-//                File file1 = new File(i.getMedia().getName());
-//                ImageIO.write(bImage2, "jpg", file1);
-//                files.add(i.getMedia());
-//                System.out.println(file1);
-//            }
-//        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
         return  ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"feeds retrieved Successfully",publicFeeds));
@@ -170,6 +154,5 @@ public class FeedService {
          return  ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"feeds retrieved Successfully",feed));
 
     }
-
 
 }
