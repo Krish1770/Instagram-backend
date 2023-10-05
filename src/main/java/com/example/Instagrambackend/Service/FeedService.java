@@ -99,15 +99,10 @@ public class FeedService {
     public ResponseEntity<ResponseDTO> getPublicFeed( Long user) throws IOException {
         User newUser = new User();
         newUser.setUserId(user);
-//        List<Feed> feeds=feedRepository.findAllByUserId(newUser);
 
         List<Feed> publicFeeds = feedRepository.findAllByPrivacyTypeAndIsArchivedAndAndUserIdAccountTypeOrderByUploadDate("public",false,"public");
         
-//        List<Media>
-//        for (feeds i : publicFeeds)
-//        {
-//
-//        }
+
 
         List<ByteArrayInputStream> imageBytesList = new ArrayList<>();
         List<File> files = new ArrayList<>();
