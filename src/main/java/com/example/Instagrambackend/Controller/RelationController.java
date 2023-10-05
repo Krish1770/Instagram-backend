@@ -25,16 +25,37 @@ public class RelationController {
         String result=relationService.isUsersValid(senderReceiverDTO.getSender(),senderReceiverDTO.getReceiver());
         if(relationService.isUserValid(senderReceiverDTO.getReceiver())) {
             Boolean isReceiverPublic = relationService.isReceiverPublic(senderReceiverDTO.getReceiver());
-            if(!isReceiverPublic)
-            {
+            senderReceiverDTO.setAction("follow");
+            System.out.println("asdfgh" + isReceiverPublic);
+            String request = senderReceiverDTO.getRequest();
+            System.out.println(result);
+            if (result.equals("")) {
+                if (!isReceiverPublic) {
+                    if (request.equals("request")) {
+                        System.out.println("werty");
+                      return  relationService.actionRequest(senderReceiverDTO);
+                    } else if (request.equals("accept")) {
+                       return relationService.actionAccept(senderReceiverDTO);
+                    } else if (request.equals("deny")) {
+                     return   relationService.actionDenied(senderReceiverDTO);
 
+                    } else if (request.equals("remove")) {
+                      return  relationService.actionRemove(senderReceiverDTO);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND, "request not found", ""));
+                    }
+                } else {
+                    return relationService.followRequest(senderReceiverDTO);
+                }
             }
+            else
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,result+"not found",""));
+
+
         }
-             if(!result.equals(""))
-             {
-               return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,result+"not found",""));
-           }
-        return relationService.followRequest(senderReceiverDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,"reciever not found",""));
+
+
 
 
 //        System.out.println(senderReceiverDTO.getSender()+" "+senderReceiverDTO.getReceiver());
@@ -55,16 +76,17 @@ public class RelationController {
 
     }
 
-    @PostMapping("/FriendRequest/{request}")
-    public  ResponseEntity<ResponseDTO> FriendRequest(@PathVariable(value = "request") String request,@RequestBody SenderIdReceiverDTO senderReceiverDTO)
+    @PostMapping("/FriendRequest")
+    public  ResponseEntity<ResponseDTO> FriendRequest(@RequestBody SenderIdReceiverDTO senderReceiverDTO)
     {
+        String request= senderReceiverDTO.getRequest();
         senderReceiverDTO.setAction("friend");
         String result=relationService.isUsersValid(senderReceiverDTO.getSender(),senderReceiverDTO.getReceiver());
         if(!result.equals(""))
         {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,result+"not found",""));
         }
-      senderReceiverDTO.setAction("follow");
+      senderReceiverDTO.setAction("friend");
         if(request.equals("request"))  //requesting
         {
 

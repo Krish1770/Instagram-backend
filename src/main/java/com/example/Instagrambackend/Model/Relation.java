@@ -12,6 +12,7 @@ public class Relation {
     private String status;
 
     private boolean following;
+    private String followingRequest;
 
     public Relation(HttpStatus httpStatus, String s, String s1) {
     }
@@ -24,6 +25,18 @@ public class Relation {
         this.userKey = userKey;
         this.status = status;
         this.following = following;
+    }
+
+    public boolean isFollowing() {
+        return following;
+    }
+
+    public String getFollowingRequest() {
+        return followingRequest;
+    }
+
+    public void setFollowingRequest(String followingRequest) {
+        this.followingRequest = followingRequest;
     }
 
     public UserKey getUserKey() {

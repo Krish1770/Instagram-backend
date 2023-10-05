@@ -102,7 +102,7 @@ public class FeedService {
 //        List<Feed> feeds=feedRepository.findAllByUserId(newUser);
 
         List<Feed> publicFeeds = feedRepository.findAllByPrivacyTypeAndIsArchivedAndAndUserIdAccountTypeOrderByUploadDate("public",false,"public");
-
+        
 //        List<Media>
 //        for (feeds i : publicFeeds)
 //        {
@@ -170,6 +170,5 @@ public class FeedService {
          return  ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"feeds retrieved Successfully",feed));
 
     }
-
 
 }
