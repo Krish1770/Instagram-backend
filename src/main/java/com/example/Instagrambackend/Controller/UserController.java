@@ -1,4 +1,5 @@
 package com.example.Instagrambackend.Controller;
+import com.example.Instagrambackend.Api.UserControllerApi;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Service.UserService;
@@ -7,15 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-
-public class UserController {
+public class UserController implements UserControllerApi {
 
 
     @Autowired
     private UserService userservice;
 
 
-    public ResponseEntity<ResponseDTO> createUser(@RequestBody User user)
+    public ResponseEntity<ResponseDTO> createUser( User user)
     {
         System.out.println(user.toString()+"  sggery");
         return userservice.createUser(user);

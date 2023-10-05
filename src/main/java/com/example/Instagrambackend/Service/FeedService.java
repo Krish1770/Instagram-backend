@@ -3,10 +3,11 @@ package com.example.Instagrambackend.Service;
 import com.example.Instagrambackend.DTO.FeedDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
+@Service
 public interface FeedService {
 
     public boolean isValidUser(Long userId);

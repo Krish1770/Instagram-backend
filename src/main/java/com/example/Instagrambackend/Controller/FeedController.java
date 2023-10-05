@@ -24,7 +24,7 @@ public class FeedController implements FeedControllerApi {
 
 
     //whether video or image
-    public ResponseEntity<ResponseDTO> mediaUpload(@RequestBody MultipartFile file, @RequestHeader Map<String,String> header) throws Exception {
+    public ResponseEntity<ResponseDTO> mediaUpload( MultipartFile file,  Map<String,String> header) throws Exception {
         System.out.println(header);
 
         if(feedService.isValidUser(Long.parseLong(header.get("user")))) {

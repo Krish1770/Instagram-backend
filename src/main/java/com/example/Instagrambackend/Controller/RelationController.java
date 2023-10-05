@@ -1,5 +1,6 @@
 package com.example.Instagrambackend.Controller;
 
+import com.example.Instagrambackend.Api.RelationControllerApi;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.DTO.SenderIdReceiverDTO;
 import com.example.Instagrambackend.Service.Impl.RelationServiceImpl;
@@ -12,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 //@RequestMapping("/user")
-public class RelationController {
+public class RelationController implements RelationControllerApi {
 
     @Autowired
     private RelationService relationservice;
+
 
 
 

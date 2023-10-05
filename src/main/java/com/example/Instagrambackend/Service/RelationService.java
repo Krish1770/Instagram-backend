@@ -3,7 +3,10 @@ package com.example.Instagrambackend.Service;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.DTO.SenderIdReceiverDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+
+@Service
 public interface RelationService {
 
     public String isUsersValid(Long userId1, Long userId2);

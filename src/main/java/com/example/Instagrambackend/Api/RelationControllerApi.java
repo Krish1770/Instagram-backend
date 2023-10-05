@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 public interface RelationControllerApi {
 
-    @PostMapping("/followRequest")
+    @PostMapping("/actionRequest")
      ResponseEntity<ResponseDTO> followRequest(@RequestBody SenderIdReceiverDTO senderReceiverDTO);
 
     @PutMapping("/unFollowRequest")
