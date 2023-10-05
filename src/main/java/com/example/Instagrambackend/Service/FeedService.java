@@ -110,18 +110,7 @@ public class FeedService {
 
 
 
-//        for(Feed i:publicFeeds)
-//        {
-//            if(!i.isArchived()) {
-//                ByteArrayInputStream sample = new ByteArrayInputStream((i.getMedia().getData()));
-//                BufferedImage bImage2 = ImageIO.read(sample);
-//                MultipartFile file = null;
-//                File file1 = new File(i.getMedia().getName());
-//                ImageIO.write(bImage2, "jpg", file1);
-//                files.add(i.getMedia());
-//                System.out.println(file1);
-//            }
-//        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
         return  ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"feeds retrieved Successfully",publicFeeds));
