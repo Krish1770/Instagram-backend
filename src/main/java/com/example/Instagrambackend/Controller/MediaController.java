@@ -1,11 +1,7 @@
 package com.example.Instagrambackend.Controller;
-import com.example.Instagrambackend.DTO.ResponseDTO;
-import com.example.Instagrambackend.Model.User;
-import com.example.Instagrambackend.Service.MediaService;
+import com.example.Instagrambackend.Service.Impl.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/Media")
