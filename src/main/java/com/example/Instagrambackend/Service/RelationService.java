@@ -9,25 +9,25 @@ import org.springframework.stereotype.Service;
 @Service
 public interface RelationService {
 
-    public String isUsersValid(Long userId1, Long userId2);
+     String isUsersValid(Long userId1, Long userId2);
 
-    public boolean isUserValid(Long userId);
+     boolean isUserValid(Long userId);
 
-    public ResponseEntity<ResponseDTO> followRequest(SenderIdReceiverDTO senderReceiverDTO);
+     ResponseEntity<ResponseDTO> followRequest(SenderIdReceiverDTO senderReceiverDTO);
 
-    public ResponseEntity<ResponseDTO> unFollow(SenderIdReceiverDTO senderReceiverDTO);
+     ResponseEntity<ResponseDTO> unFollow(SenderIdReceiverDTO senderReceiverDTO);
 
-    public ResponseEntity<ResponseDTO> actionRequest(SenderIdReceiverDTO senderReceiverDTO) ;
+     ResponseEntity<ResponseDTO> actionRequest(SenderIdReceiverDTO senderReceiverDTO) ;
 
-    public ResponseEntity<ResponseDTO> actionAccept(SenderIdReceiverDTO senderReceiverDTO);
+     ResponseEntity<ResponseDTO> actionAccept(SenderIdReceiverDTO senderReceiverDTO);
 
-    public ResponseEntity<ResponseDTO> actionDenied(SenderIdReceiverDTO senderReceiverDTO);
+     ResponseEntity<ResponseDTO> actionDenied(SenderIdReceiverDTO senderReceiverDTO);
 
-    public ResponseEntity<ResponseDTO> actionRemove(SenderIdReceiverDTO senderReceiverDTO);
+     ResponseEntity<ResponseDTO> actionRemove(SenderIdReceiverDTO senderReceiverDTO);
 
-    public ResponseEntity<ResponseDTO> friendsList(Long userId);
+     ResponseEntity<ResponseDTO> friendsList(Long userId);
 
-    public ResponseEntity<ResponseDTO> followersList(Long userId) ;
+     ResponseEntity<ResponseDTO> followersList(Long userId) ;
 
-    public boolean isReceiverPublic(Long userId);
+     boolean isReceiverPublic(Long userId);
     }

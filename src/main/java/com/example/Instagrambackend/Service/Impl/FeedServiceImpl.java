@@ -6,11 +6,10 @@ import com.example.Instagrambackend.Model.Feed;
 import com.example.Instagrambackend.Model.Media;
 import com.example.Instagrambackend.Model.Relation;
 import com.example.Instagrambackend.Model.User;
-import com.example.Instagrambackend.Repository.FeedRepository;
-import com.example.Instagrambackend.Repository.MediaRepository;
 import com.example.Instagrambackend.Repository.RelationRepository;
 import com.example.Instagrambackend.Repository.Service.FeedRepoService;
-import com.example.Instagrambackend.Repository.UserRepository;
+import com.example.Instagrambackend.Repository.Service.MediaRepoService;
+import com.example.Instagrambackend.Repository.Service.UserRepoService;
 import com.example.Instagrambackend.Service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -35,14 +34,14 @@ public class FeedServiceImpl implements FeedService {
     private FeedRepoService feedRepoService;
 
     @Autowired
-    private MediaRepository mediaRepository;
+    private MediaRepoService mediaRepoService;
     @Autowired
-    private UserRepository userRepository;
+    private UserRepoService userRepoService;
 
    @Autowired
    private RelationRepository relationRepository;
     public boolean isValidUser(Long userId) {
-        return userRepository.findById(userId).isPresent();
+        return userRepoService.findById(userId).isPresent();
     }
     public ResponseEntity<ResponseDTO> mediaUploadRequest(MultipartFile file,FeedDTO feedDTO) throws IOException {
 
@@ -58,9 +57,9 @@ public class FeedServiceImpl implements FeedService {
         media.setData(file.getBytes());
 
         media.setType(feedDTO.getType());
-        mediaRepository.save(media);
+        mediaRepoService.save(media);
         newFeed.setMedia(media);
-        User newUser=userRepository.findById(feedDTO.getUser()).get();
+        User newUser=userRepoService.findById(feedDTO.getUser()).get();
         newFeed.setUserId(newUser);
         System.out.println(feedRepoService.save(newFeed));
 
@@ -146,10 +145,6 @@ public class FeedServiceImpl implements FeedService {
 
                  System.out.println(tempfeed.isEmpty());
                  feed.addAll(tempfeed);
-
-
-
-
 
         }
 

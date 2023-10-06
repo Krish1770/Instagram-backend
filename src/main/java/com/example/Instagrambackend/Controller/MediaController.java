@@ -1,5 +1,5 @@
 package com.example.Instagrambackend.Controller;
-import com.example.Instagrambackend.Service.Impl.MediaService;
+import com.example.Instagrambackend.Service.Impl.MediaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 public class MediaController {
 
     @Autowired
-    private MediaService mediaService;
+    private MediaServiceImpl mediaService;
 
 
 //    @PostMapping("/upload/{userId}/{Type}")  //whether video or image

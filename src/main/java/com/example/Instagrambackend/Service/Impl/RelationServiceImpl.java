@@ -5,6 +5,8 @@ import com.example.Instagrambackend.DTO.SenderIdReceiverDTO;
 import com.example.Instagrambackend.Model.Relation;
 import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Repository.RelationRepository;
+import com.example.Instagrambackend.Repository.Service.RelationRepoService;
+import com.example.Instagrambackend.Repository.Service.UserRepoService;
 import com.example.Instagrambackend.Repository.UserRepository;
 import com.example.Instagrambackend.Service.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +21,15 @@ import java.util.Optional;
 @Service
 public class RelationServiceImpl implements RelationService {
     @Autowired
-    private RelationRepository relationRepository;
+    private RelationRepoService relationRepoService;
     @Autowired
-    private UserRepository userRepository;
+    private UserRepoService userRepoService;
 
 
     public String isUsersValid(Long userId1, Long userId2) {
 
-        boolean sender = userRepository.findById(userId1).isPresent();
-        boolean receiver = userRepository.findById(userId2).isPresent();
+        boolean sender = userRepoService.findById(userId1).isPresent();
+        boolean receiver = userRepoService.findById(userId2).isPresent();
         String temp = "";
         if (!sender) {
             temp += userId1;
@@ -44,7 +46,7 @@ public class RelationServiceImpl implements RelationService {
     }
 
     public boolean isUserValid(Long userId) {
-        return userRepository.findById(userId).isPresent();
+        return userRepoService.findById(userId).isPresent();
     }
 
 
@@ -52,12 +54,12 @@ public class RelationServiceImpl implements RelationService {
 
         System.out.println(senderReceiverDTO.getSender() + "  " + senderReceiverDTO.getReceiver());
 
-        Optional<Relation> byUserKeySenderUserIdAndUserKeyReceiverUserId = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
+        Optional<Relation> byUserKeySenderUserIdAndUserKeyReceiverUserId = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
 
         if (byUserKeySenderUserIdAndUserKeyReceiverUserId.isPresent() && !(byUserKeySenderUserIdAndUserKeyReceiverUserId.get().getFollowing())) {
             byUserKeySenderUserIdAndUserKeyReceiverUserId.get().setFollowing(true);
             byUserKeySenderUserIdAndUserKeyReceiverUserId.get().setFollowingRequest("accepted");
-            relationRepository.save(byUserKeySenderUserIdAndUserKeyReceiverUserId.get());
+            relationRepoService.save(byUserKeySenderUserIdAndUserKeyReceiverUserId.get());
             System.out.println("doneeeeeeeeeeee");
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, (senderReceiverDTO.getSender() +
                     "is folllllllowing " + senderReceiverDTO.getReceiver()), ""));
@@ -67,11 +69,11 @@ public class RelationServiceImpl implements RelationService {
 
         if (byUserKeySenderUserIdAndUserKeyReceiverUserId.isEmpty()) {
             Relation tempRelation = new Relation();
-            tempRelation.setUserKey(userRepository.findById(senderReceiverDTO.getSender()).get(), userRepository.findById(senderReceiverDTO.getReceiver()).get());
+            tempRelation.setUserKey(userRepoService.findById(senderReceiverDTO.getSender()).get(), userRepoService.findById(senderReceiverDTO.getReceiver()).get());
 //            tempRelation.setStatus("none");
             tempRelation.setFollowing(true);
 
-            Relation save = relationRepository.save(tempRelation);
+            Relation save = relationRepoService.save(tempRelation);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, (senderReceiverDTO.getSender() +
                     "is  following " + senderReceiverDTO.getReceiver()), save));
 
@@ -82,14 +84,14 @@ public class RelationServiceImpl implements RelationService {
 
     public ResponseEntity<ResponseDTO> unFollow(SenderIdReceiverDTO senderReceiverDTO) {
 
-        Optional<Relation> byUserKeySenderUserIdAndUserKeyReceiverUserId = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
+        Optional<Relation> byUserKeySenderUserIdAndUserKeyReceiverUserId = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
 
         if (!byUserKeySenderUserIdAndUserKeyReceiverUserId.isEmpty()) {
             Relation tempRelation = new Relation();
-            tempRelation.setUserKey(userRepository.findById(senderReceiverDTO.getSender()).get(), userRepository.findById(senderReceiverDTO.getReceiver()).get());
+            tempRelation.setUserKey(userRepoService.findById(senderReceiverDTO.getSender()).get(), userRepoService.findById(senderReceiverDTO.getReceiver()).get());
             tempRelation.setFollowing(false);
 
-            Relation save = relationRepository.save(tempRelation);
+            Relation save = relationRepoService.save(tempRelation);
 
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, (senderReceiverDTO.getSender() +
                     "unfollowed " + senderReceiverDTO.getReceiver()), save));
@@ -99,11 +101,11 @@ public class RelationServiceImpl implements RelationService {
     }
 
     public ResponseEntity<ResponseDTO> actionRequest(SenderIdReceiverDTO senderReceiverDTO) {
-        Optional<Relation> tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
+        Optional<Relation> tempRelation = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
   String action=senderReceiverDTO.getAction();
         System.out.println("requestService");
         if (tempRelation == null) {
-            tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getReceiver(), senderReceiverDTO.getSender());
+            tempRelation = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getReceiver(), senderReceiverDTO.getSender());
 
         }
         if (tempRelation.isPresent()) {
@@ -128,7 +130,7 @@ public class RelationServiceImpl implements RelationService {
             else
                 tempRelation.get().setFollowingRequest("accepted");
             Relation newRelation = tempRelation.get();
-            relationRepository.save(newRelation);
+            relationRepoService.save(newRelation);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " request" +
 
                     "sent", newRelation));
@@ -144,14 +146,14 @@ public class RelationServiceImpl implements RelationService {
          else {
             Relation newRelation = new Relation();
 
-            newRelation.setUserKey(userRepository.findById(senderReceiverDTO.getSender()).get()
-                    , userRepository.findById(senderReceiverDTO.getReceiver()).get());
+            newRelation.setUserKey(userRepoService.findById(senderReceiverDTO.getSender()).get()
+                    , userRepoService.findById(senderReceiverDTO.getReceiver()).get());
 
             if(action.equals("friend"))
              newRelation.setStatus("requested");
             else
                 newRelation.setFollowingRequest("requested");
-            relationRepository.save(newRelation);
+            relationRepoService.save(newRelation);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, " request" +
                     "sent", newRelation));
 
@@ -159,7 +161,7 @@ public class RelationServiceImpl implements RelationService {
     }
 
     public ResponseEntity<ResponseDTO> actionAccept(SenderIdReceiverDTO senderReceiverDTO) {
-        Optional<Relation> tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
+        Optional<Relation> tempRelation = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
 
          int resultFlag=0;
         String action=senderReceiverDTO.getAction();
@@ -170,7 +172,7 @@ public class RelationServiceImpl implements RelationService {
                     {
                         tempRelation.get().setFollowingRequest("accepted");
                         Relation newRelation=tempRelation.get();
-                        relationRepository.save(newRelation);
+                        relationRepoService.save(newRelation);
                         resultFlag=1;
                     }
             else if(action.equals("friend") && (tempRelation.get().getStatus()!=null&&(tempRelation.get().getStatus()).equals("requested")))
@@ -207,7 +209,7 @@ public class RelationServiceImpl implements RelationService {
 
     public ResponseEntity<ResponseDTO> actionDenied(SenderIdReceiverDTO senderReceiverDTO) {
 
-        Optional<Relation> tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
+        Optional<Relation> tempRelation = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
   String action=senderReceiverDTO.getAction();
 
   int resultFlag=0;
@@ -225,7 +227,7 @@ public class RelationServiceImpl implements RelationService {
                 tempRelation.get().setStatus("denied");
 
                 Relation newRelation=tempRelation.get();
-                relationRepository.save(newRelation);
+                relationRepoService.save(newRelation);
                 resultFlag=1;
 
             }
@@ -254,7 +256,7 @@ public class RelationServiceImpl implements RelationService {
     }
 
     public ResponseEntity<ResponseDTO> actionRemove(SenderIdReceiverDTO senderReceiverDTO) {
-        Optional<Relation> tempRelation = relationRepository.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
+        Optional<Relation> tempRelation = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
 
         String action=senderReceiverDTO.getAction();
 
@@ -294,10 +296,10 @@ public class RelationServiceImpl implements RelationService {
     }
 
     public ResponseEntity<ResponseDTO> friendsList(Long userId) {
-        User tempUser = userRepository.findById(userId).get();
+        User tempUser = userRepoService.findById(userId).get();
 
         if (tempUser != null) {
-            List<Relation> friendList = relationRepository.findByUserKeySenderUserIdOrUserKeyReceiverUserIdAndStatus(userId, userId, "accepted").get();
+            List<Relation> friendList = relationRepoService.findByUserKeySenderUserIdOrUserKeyReceiverUserIdAndStatus(userId, userId, "accepted").get();
 
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "friend List returned", friendList));
         }
@@ -306,10 +308,10 @@ public class RelationServiceImpl implements RelationService {
 
     public ResponseEntity<ResponseDTO> followersList(Long userId) {
 
-        User tempUser = userRepository.findById(userId).get();
+        User tempUser = userRepoService.findById(userId).get();
 
         if (tempUser != null) {
-            List<Relation> followersList = relationRepository.findByUserKeyReceiverUserIdAndFollowing(userId, true).get();
+            List<Relation> followersList = relationRepoService.findByUserKeyReceiverUserIdAndFollowing(userId, true).get();
 
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "follow List returned", followersList));
 
@@ -320,7 +322,7 @@ public class RelationServiceImpl implements RelationService {
 
     public boolean isReceiverPublic(Long userId)
     {
-        User user=userRepository.findById(userId).get();
+        User user=userRepoService.findById(userId).get();
         return user.getAccountType().equals("public");
     }
 }

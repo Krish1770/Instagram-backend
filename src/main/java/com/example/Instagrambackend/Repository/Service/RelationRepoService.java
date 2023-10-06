@@ -18,4 +18,5 @@ public interface RelationRepoService
 
     Optional<List<Relation>> findAllByUserKeySenderUserIdAndFollowingOrStatus(Long userId1,Boolean following,String status);
 
+    Relation save(Relation relation);
 }
