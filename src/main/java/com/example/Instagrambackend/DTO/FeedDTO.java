@@ -1,8 +1,12 @@
 package com.example.Instagrambackend.DTO;
 
 import com.example.Instagrambackend.Model.User;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FeedDTO  {
 
 //    public MultipartFile getFile() {
@@ -15,16 +19,12 @@ public class FeedDTO  {
 //
 //    private MultipartFile file;
     private Long user;
+    private String privacyType;
+    private String type;
 
     public Long getUser() {
         return user;
     }
-
-    public void setUser(Long user) {
-        this.user = user;
-    }
-
-    private String privacyType;
 
 //    public User getUser() {
 //        return user;
@@ -33,6 +33,10 @@ public class FeedDTO  {
 //    public void setUser(User user) {
 //        this.user = user;
 //    }
+
+    public void setUser(Long user) {
+        this.user = user;
+    }
 
     public String getPrivacyType() {
         return privacyType;
@@ -49,8 +53,6 @@ public class FeedDTO  {
     public void setType(String type) {
         this.type = type;
     }
-
-    private String type;
 
 
 }
