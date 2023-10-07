@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
          if(userByEmail==null)
          {
 
-             user.setActive(true);
+             user.setIsActive(true);
             User savedUser=userRepoService.save(user);
 
              System.out.println("sdgdf");
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
         if(tempUser!=null)
         {
-            tempUser.setActive(false);
+            tempUser.setIsActive(false);
             userRepoService.save(tempUser);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"User Deleted Successfully",userId));
 

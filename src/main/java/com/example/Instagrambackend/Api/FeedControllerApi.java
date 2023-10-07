@@ -14,7 +14,7 @@ public interface FeedControllerApi {
     @PostMapping("/upload/file")
     public ResponseEntity<ResponseDTO> mediaUpload(@RequestBody MultipartFile file, @RequestHeader Map<String,String> header) throws Exception;
 
-    @PutMapping(value = "/upload/{feedId}/{ArchiveFlag}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/upload/{feedId}/{ArchiveFlag}")
     public ResponseEntity<ResponseDTO> FeedArchiving(@PathVariable Boolean ArchiveFlag, @PathVariable Long feedId);
 
     @GetMapping("/view/{userId}/{feedType}")

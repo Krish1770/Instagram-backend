@@ -2,10 +2,18 @@ package com.example.Instagrambackend.Model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
-
 @Entity
 @Table(name = "relation_list")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Relation {
     @EmbeddedId
     private UserKey userKey;
@@ -14,58 +22,4 @@ public class Relation {
     private boolean following;
     private String followingRequest;
 
-    public Relation(HttpStatus httpStatus, String s, String s1) {
     }
-
-    public Relation() {
-
-    }
-
-    public Relation(UserKey userKey, String status, boolean following) {
-        this.userKey = userKey;
-        this.status = status;
-        this.following = following;
-    }
-
-    public boolean isFollowing() {
-        return following;
-    }
-
-    public String getFollowingRequest() {
-        return followingRequest;
-    }
-
-    public void setFollowingRequest(String followingRequest) {
-        this.followingRequest = followingRequest;
-    }
-
-    public UserKey getUserKey() {
-        return userKey;
-    }
-
-    public void setUserKey(UserKey userKey) {
-        this.userKey = userKey;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public boolean getFollowing() {
-        return following;
-    }
-
-    public void setFollowing(boolean following) {
-        this.following = following;
-    }
-
-
-
-    public void setUserKey(User sender, User receiver) {
-        this.userKey = new UserKey(sender, receiver);
-    }
-}

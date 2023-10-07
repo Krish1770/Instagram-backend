@@ -9,6 +9,7 @@ import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Repository.RelationRepository;
 import com.example.Instagrambackend.Repository.Service.FeedRepoService;
 import com.example.Instagrambackend.Repository.Service.MediaRepoService;
+import com.example.Instagrambackend.Repository.Service.RelationRepoService;
 import com.example.Instagrambackend.Repository.Service.UserRepoService;
 import com.example.Instagrambackend.Service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class FeedServiceImpl implements FeedService {
     private UserRepoService userRepoService;
 
    @Autowired
-   private RelationRepository relationRepository;
+   private RelationRepoService relationRepoService;
     public boolean isValidUser(Long userId) {
         return userRepoService.findById(userId).isPresent();
     }
@@ -123,7 +124,7 @@ public class FeedServiceImpl implements FeedService {
         User newUser=new User();
         newUser.setUserId(userId);
 
-      Optional <List<Relation>> friendsAndFollowing=relationRepository.findAllByUserKeySenderUserIdAndFollowingOrStatus
+      Optional <List<Relation>> friendsAndFollowing=relationRepoService.findAllByUserKeySenderUserIdAndFollowingOrStatus
                 (userId,true,"accepted");
 
 //      List<Optional<Relation>> privateFeedsOfTheUser=new ArrayList<>();

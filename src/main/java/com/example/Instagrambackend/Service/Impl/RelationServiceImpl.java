@@ -1,14 +1,17 @@
 package com.example.Instagrambackend.Service.Impl;
 
+import com.example.Instagrambackend.Config.Mapper;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.DTO.SenderIdReceiverDTO;
 import com.example.Instagrambackend.Model.Relation;
 import com.example.Instagrambackend.Model.User;
+import com.example.Instagrambackend.Model.UserKey;
 import com.example.Instagrambackend.Repository.RelationRepository;
 import com.example.Instagrambackend.Repository.Service.RelationRepoService;
 import com.example.Instagrambackend.Repository.Service.UserRepoService;
 import com.example.Instagrambackend.Repository.UserRepository;
 import com.example.Instagrambackend.Service.RelationService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +28,8 @@ public class RelationServiceImpl implements RelationService {
     @Autowired
     private UserRepoService userRepoService;
 
-
+    @Autowired
+    private Mapper modelMapper;
     public String isUsersValid(Long userId1, Long userId2) {
 
         boolean sender = userRepoService.findById(userId1).isPresent();
@@ -56,7 +60,7 @@ public class RelationServiceImpl implements RelationService {
 
         Optional<Relation> byUserKeySenderUserIdAndUserKeyReceiverUserId = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
 
-        if (byUserKeySenderUserIdAndUserKeyReceiverUserId.isPresent() && !(byUserKeySenderUserIdAndUserKeyReceiverUserId.get().getFollowing())) {
+        if (byUserKeySenderUserIdAndUserKeyReceiverUserId.isPresent() && !(byUserKeySenderUserIdAndUserKeyReceiverUserId.get().isFollowing())) {
             byUserKeySenderUserIdAndUserKeyReceiverUserId.get().setFollowing(true);
             byUserKeySenderUserIdAndUserKeyReceiverUserId.get().setFollowingRequest("accepted");
             relationRepoService.save(byUserKeySenderUserIdAndUserKeyReceiverUserId.get());
@@ -69,7 +73,11 @@ public class RelationServiceImpl implements RelationService {
 
         if (byUserKeySenderUserIdAndUserKeyReceiverUserId.isEmpty()) {
             Relation tempRelation = new Relation();
-            tempRelation.setUserKey(userRepoService.findById(senderReceiverDTO.getSender()).get(), userRepoService.findById(senderReceiverDTO.getReceiver()).get());
+            UserKey newUserKey=new UserKey();
+            newUserKey.setSender((userRepoService.findById(senderReceiverDTO.getSender()).get()));
+            newUserKey.setReceiver((userRepoService.findById(senderReceiverDTO.getReceiver()).get()));
+
+            tempRelation.setUserKey(newUserKey);
 //            tempRelation.setStatus("none");
             tempRelation.setFollowing(true);
 
@@ -88,8 +96,17 @@ public class RelationServiceImpl implements RelationService {
 
         if (!byUserKeySenderUserIdAndUserKeyReceiverUserId.isEmpty()) {
             Relation tempRelation = new Relation();
-            tempRelation.setUserKey(userRepoService.findById(senderReceiverDTO.getSender()).get(), userRepoService.findById(senderReceiverDTO.getReceiver()).get());
+            UserKey newUserKey=new UserKey();
+
+//            newUserKey=modelMapper.modelMapper().map(senderReceiverDTO,UserKey.class);
+//
+//            System.out.println(newUserKey.getReceiver()+""+newUserKey.getSender());
+            newUserKey.setSender(userRepoService.findById(senderReceiverDTO.getSender()).get());
+            newUserKey.setReceiver(userRepoService.findById(senderReceiverDTO.getReceiver()).get());
+
+            tempRelation.setUserKey(newUserKey);
             tempRelation.setFollowing(false);
+
 
             Relation save = relationRepoService.save(tempRelation);
 
@@ -146,8 +163,11 @@ public class RelationServiceImpl implements RelationService {
          else {
             Relation newRelation = new Relation();
 
-            newRelation.setUserKey(userRepoService.findById(senderReceiverDTO.getSender()).get()
-                    , userRepoService.findById(senderReceiverDTO.getReceiver()).get());
+            UserKey newUserKey=new UserKey();
+//            newUserKey.setSender(userRepoService.findById(senderReceiverDTO.getSender()).get());
+//            newUserKey.setReceiver(userRepoService.findById(senderReceiverDTO.getReceiver()).get());
+
+            newRelation.setUserKey(newUserKey);
 
             if(action.equals("friend"))
              newRelation.setStatus("requested");
