@@ -1,5 +1,6 @@
 package com.example.Instagrambackend.Service.Impl;
 
+import com.example.Instagrambackend.DTO.LoginDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Repository.Service.UserRepoService;
@@ -54,10 +55,19 @@ public class UserServiceImpl implements UserService {
 
 
     }
-    public boolean isUserValid(Long userId)
+    public User isUserValid(String email)
     {
-        return userRepoService.findById(userId).isPresent();
+        return userRepoService.findByEmailId(email);
     }
 
 
+    public ResponseEntity<ResponseDTO> login(LoginDTO loginDTO,User user)
+    {
+       if(loginDTO.getPassword().equals(user.getPassword()))
+       {
+           return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"login successfully",""));
+       }
+
+       return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,"invalid user",""));
+    }
 }

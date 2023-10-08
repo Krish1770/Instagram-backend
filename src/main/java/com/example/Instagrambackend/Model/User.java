@@ -34,6 +34,8 @@ public class User  {
      private String mobileNumber;
     private Boolean isActive;
 
+    private  String password;
+
 
 
 

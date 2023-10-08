@@ -22,9 +22,7 @@ public class FeedDTO  {
     private String privacyType;
     private String type;
 
-    public Long getUser() {
-        return user;
-    }
+
 
 //    public User getUser() {
 //        return user;
@@ -34,25 +32,9 @@ public class FeedDTO  {
 //        this.user = user;
 //    }
 
-    public void setUser(Long user) {
-        this.user = user;
-    }
 
-    public String getPrivacyType() {
-        return privacyType;
-    }
 
-    public void setPrivacyType(String privacyType) {
-        this.privacyType = privacyType;
-    }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
 
 }
