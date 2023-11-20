@@ -2,11 +2,14 @@ package com.example.Instagrambackend.Api;
 
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.DTO.SenderIdReceiverDTO;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 public interface RelationControllerApi {
+
 
     @PostMapping("/actionRequest")
      ResponseEntity<ResponseDTO> followRequest(@RequestBody SenderIdReceiverDTO senderReceiverDTO);
@@ -16,6 +19,7 @@ public interface RelationControllerApi {
 
     @PostMapping("/FriendRequest")
     public  ResponseEntity<ResponseDTO> FriendRequest(@RequestBody SenderIdReceiverDTO senderReceiverDTO);
+
 
     @GetMapping("/FriendList/{userId}")
     public ResponseEntity<ResponseDTO>friendsList(@PathVariable Long userId);

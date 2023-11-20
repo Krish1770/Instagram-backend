@@ -27,14 +27,21 @@ public class Feed {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long feedId;
 
+    @ManyToOne(targetEntity = Category.class,cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoryId",referencedColumnName ="categoryId" )
+    private Category categoryId;
+
     @OneToOne(targetEntity = Media.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "mediaId")
     private Media media;
 
+    @Column(name = "uploadDate")
     private Date uploadDate;
 
+    @Column(name = "isArchived")
     private boolean isArchived;
 
+    @Column(name = "privacyType")
     private String privacyType;
 
 }

@@ -1,5 +1,6 @@
 package com.example.Instagrambackend.Service.Impl;
 
+import com.example.Instagrambackend.Auth.JWTService;
 import com.example.Instagrambackend.DTO.LoginDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Model.User;
@@ -9,13 +10,19 @@ import com.example.Instagrambackend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepoService userRepoService;
+
+    @Autowired
+    private JWTService jwtService;
 
 
     public ResponseEntity<ResponseDTO> createUser(User user) {
@@ -63,11 +70,14 @@ public class UserServiceImpl implements UserService {
 
     public ResponseEntity<ResponseDTO> login(LoginDTO loginDTO,User user)
     {
-       if(loginDTO.getPassword().equals(user.getPassword()))
-       {
-           return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"login successfully",""));
-       }
+           return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,jwtService.generateToken(loginDTO.getEmail()),""));
 
-       return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,"invalid user",""));
+
+//       return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,"invalid user",""));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepoService.findByEmailId(email);
     }
 }

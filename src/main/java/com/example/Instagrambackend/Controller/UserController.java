@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 public class UserController implements UserControllerApi {
 
@@ -30,11 +32,11 @@ public class UserController implements UserControllerApi {
     }
 
 
-    public ResponseEntity<ResponseDTO> login(@RequestBody LoginDTO loginDTO)
+    public ResponseEntity<ResponseDTO> login(LoginDTO loginDTO)
     {
         User validUser=userservice.isUserValid(loginDTO.getEmail());
-
-        if(validUser!=null)
+        System.out.println(validUser.getPassword());
+        if(validUser!=null && validUser.getPassword().equals(loginDTO.getPassword()))
             return userservice.login(loginDTO,validUser);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,"user not found",""));
