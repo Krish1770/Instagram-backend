@@ -32,6 +32,7 @@ public class RelationController implements RelationControllerApi {
             System.out.println("asdfgh" + isReceiverPublic);
             String request = senderReceiverDTO.getRequest();
             System.out.println(result);
+            System.out.println(senderReceiverDTO.toString());
             if (result.equals("")) {
                 if (!isReceiverPublic) {
                     if (request.equals("request")) {

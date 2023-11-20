@@ -1,6 +1,8 @@
 package com.example.Instagrambackend.Api;
 
 import com.example.Instagrambackend.DTO.ResponseDTO;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,9 @@ public interface FeedControllerApi {
     public ResponseEntity<ResponseDTO> FeedArchiving(@PathVariable Boolean ArchiveFlag, @PathVariable Long feedId);
 
     @GetMapping("/view/{userId}/{feedType}")
-    public ResponseEntity<ResponseDTO> getFeed(@PathVariable Map<String,String>feedDetails) throws IOException;
+//    @Cacheable(value ="getFeed",key = "#userId+'_'+#feedType")
+    public String getFeed(@PathVariable Long userId,@PathVariable String feedType);
+//    public String getFeed(@PathVariable Map<String,String>feedDetails) throws IOException;
 
 }
 

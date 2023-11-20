@@ -56,6 +56,7 @@ public class FeedServiceImpl implements FeedService {
         Media media =new Media();
         media.setName(file.getOriginalFilename());
         media.setData(file.getBytes());
+        media.setType(file.getContentType());
 
         media.setType(feedDTO.getType());
         mediaRepoService.save(media);
@@ -103,14 +104,12 @@ public class FeedServiceImpl implements FeedService {
         newUser.setUserId(user);
 
         List<Feed> publicFeeds = feedRepoService.findAllByPrivacyTypeAndIsArchivedAndAndUserIdAccountTypeOrderByUploadDate("public",false,"public");
-        
-
+        System.out.println("cdsgs");
+        for(Feed i:publicFeeds)
+            System.out.println(i.getFeedId());
 
         List<ByteArrayInputStream> imageBytesList = new ArrayList<>();
         List<File> files = new ArrayList<>();
-
-
-
 
 
         HttpHeaders headers = new HttpHeaders();

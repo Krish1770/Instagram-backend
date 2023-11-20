@@ -15,6 +15,7 @@ public class UserRepoServiceImpl implements UserRepoService {
     private UserRepository userRepository;
     @Override
     public User findByEmailId(String emailId) {
+        System.out.println(emailId);
         return userRepository.findByEmailId(emailId);
     }
 
