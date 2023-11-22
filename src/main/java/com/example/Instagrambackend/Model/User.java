@@ -10,6 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.List;
 public class User implements UserDetails, CredentialsContainer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
     private String accountType;
@@ -38,11 +40,21 @@ public class User implements UserDetails, CredentialsContainer {
 
     private Date dateOfBirth;
 
-    private String emailId;
+    @Min(value = 1,message = "error")
+    @Max(value = 10)
+    @Column(nullable = true)
+    private Integer age;
+//    @Column(nullable = false)
 
+//    @NotEmpty(message = "error")
+    @NotBlank(message = "error")
+    private String emailId;
+ @Column(length = 10)
+ @Size(max = 10,min = 10,message = "length of mobileNumber must be 10")
     private String mobileNumber;
 
     private Boolean isActive;
+
 
     private String password;
 

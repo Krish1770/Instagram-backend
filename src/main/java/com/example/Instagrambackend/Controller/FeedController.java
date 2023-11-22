@@ -4,6 +4,8 @@ import com.example.Instagrambackend.Api.FeedControllerApi;
 import com.example.Instagrambackend.DTO.FeedDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Model.Feed;
+import com.example.Instagrambackend.Model.FeedView;
+//import com.example.Instagrambackend.Model.Feed_View;
 import com.example.Instagrambackend.Service.FeedService;
 import com.example.Instagrambackend.Service.Impl.FeedServiceImpl;
 import org.bson.json.JsonObject;
@@ -83,6 +85,10 @@ public class FeedController implements FeedControllerApi {
         return "";
     }
 
+    @Override
+    public List<FeedView> display() {
+        return feedService.display();
+    }
 
 
 }
