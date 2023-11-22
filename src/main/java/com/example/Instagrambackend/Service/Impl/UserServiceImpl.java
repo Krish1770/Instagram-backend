@@ -1,5 +1,6 @@
 package com.example.Instagrambackend.Service.Impl;
 
+import com.example.Instagrambackend.Advice.UserNotFoundException;
 import com.example.Instagrambackend.Auth.JWTService;
 import com.example.Instagrambackend.DTO.LoginDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
@@ -7,6 +8,7 @@ import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Repository.Service.UserRepoService;
 import com.example.Instagrambackend.Repository.UserRepository;
 import com.example.Instagrambackend.Service.UserService;
+import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -25,10 +30,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private JWTService jwtService;
 
 
+    @Valid
     public ResponseEntity<ResponseDTO> createUser(User user) {
-         User userByEmail;
+         User userByEmail=null;
       userByEmail =userRepoService.findByEmailId(user.getEmailId());
-
+        System.out.println("service");
         System.out.println(userByEmail);
          if(userByEmail==null)
          {
@@ -40,25 +46,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
              return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"User Added Successfully",savedUser));
 
          }
-
-         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,"email Already Exist",""));
+//if(user.getUserId()==null)
+//{
+//
+//}
+         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(HttpStatus.NOT_FOUND,"email Already Exist",""));
 
 
     }
 
 
     public ResponseEntity<ResponseDTO> deleteUser(Long userId) {
-        User tempUser=userRepoService.findById(userId).get();
+        Optional<User> tempUser=userRepoService.findById(userId);
 
-        if(tempUser!=null)
+        if(tempUser.isPresent())
         {
-            tempUser.setIsActive(false);
-            userRepoService.save(tempUser);
+            tempUser.get().setIsActive(false);
+            userRepoService.save(tempUser.get());
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"User Deleted Successfully",userId));
 
 
         }
-        return  ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.BAD_REQUEST,"User not found",userId));
+
+        System.out.println("service");
+        throw new UserNotFoundException();
 
 
     }

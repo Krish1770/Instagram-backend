@@ -2,15 +2,9 @@ package com.example.Instagrambackend.Service.Impl;
 
 import com.example.Instagrambackend.DTO.FeedDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
-import com.example.Instagrambackend.Model.Feed;
-import com.example.Instagrambackend.Model.Media;
-import com.example.Instagrambackend.Model.Relation;
-import com.example.Instagrambackend.Model.User;
+import com.example.Instagrambackend.Model.*;
 import com.example.Instagrambackend.Repository.RelationRepository;
-import com.example.Instagrambackend.Repository.Service.FeedRepoService;
-import com.example.Instagrambackend.Repository.Service.MediaRepoService;
-import com.example.Instagrambackend.Repository.Service.RelationRepoService;
-import com.example.Instagrambackend.Repository.Service.UserRepoService;
+import com.example.Instagrambackend.Repository.Service.*;
 import com.example.Instagrambackend.Service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +25,8 @@ import java.util.Optional;
 @Service
 public class FeedServiceImpl implements FeedService {
 
+    @Autowired
+    private FeedViewRepoService feedViewRepoService;
     @Autowired
     private FeedRepoService feedRepoService;
 
@@ -150,6 +146,11 @@ public class FeedServiceImpl implements FeedService {
 
          return  ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"feeds retrieved Successfully",feed));
 
+    }
+
+    @Override
+    public List<FeedView> display() {
+        return feedViewRepoService.displayFeedView();
     }
 
 }

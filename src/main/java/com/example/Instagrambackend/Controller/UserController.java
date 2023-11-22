@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Objects;
 
 @RestController
@@ -19,6 +20,7 @@ public class UserController implements UserControllerApi {
     private UserService userservice;
 
 
+    @Valid
     public ResponseEntity<ResponseDTO> createUser( User user)
     {
         System.out.println(user.toString()+"  sggery");
@@ -28,6 +30,7 @@ public class UserController implements UserControllerApi {
 
     public ResponseEntity<ResponseDTO> DeleteUser(@PathVariable Long userId)
     {
+        System.out.println("deletion");
         return userservice.deleteUser(userId);
     }
 

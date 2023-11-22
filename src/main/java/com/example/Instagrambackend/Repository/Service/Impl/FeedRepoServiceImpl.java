@@ -23,8 +23,6 @@ public class FeedRepoServiceImpl implements FeedRepoService {
     public List<Feed> findAllByPrivacyTypeAndIsArchivedAndAndUserIdAccountTypeOrderByUploadDate(String privacyType, boolean isArchived, String AccountType) {
         return feedRepository.findAllByPrivacyTypeAndIsArchivedAndAndUserIdAccountTypeOrderByUploadDate(privacyType, isArchived, AccountType);
     }
-
-    @Override
     public Feed save(Feed feed) {
         return feedRepository.save(feed);
     }
