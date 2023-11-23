@@ -8,6 +8,7 @@ import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Repository.Service.UserRepoService;
 import com.example.Instagrambackend.Repository.UserRepository;
 import com.example.Instagrambackend.Service.UserService;
+import jakarta.validation.Valid;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
+
 import java.util.Optional;
 
 @Service

@@ -6,7 +6,10 @@ import com.example.Instagrambackend.Model.*;
 import com.example.Instagrambackend.Repository.RelationRepository;
 import com.example.Instagrambackend.Repository.Service.*;
 import com.example.Instagrambackend.Service.FeedService;
+import jakarta.transaction.Transactional;
+import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +29,8 @@ import java.util.Optional;
 public class FeedServiceImpl implements FeedService {
 
     @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
     private FeedViewRepoService feedViewRepoService;
     @Autowired
     private FeedRepoService feedRepoService;
@@ -37,12 +42,19 @@ public class FeedServiceImpl implements FeedService {
 
    @Autowired
    private RelationRepoService relationRepoService;
+
+
     public boolean isValidUser(Long userId) {
         return userRepoService.findById(userId).isPresent();
     }
+
+
+    @Transactional
     public ResponseEntity<ResponseDTO> mediaUploadRequest(MultipartFile file,FeedDTO feedDTO) throws IOException {
 
         Feed newFeed=new Feed();
+
+//        Feed newFeed=null;
         newFeed.setArchived(false);
         newFeed.setUploadDate(new Date());
 
@@ -50,22 +62,24 @@ public class FeedServiceImpl implements FeedService {
 
 
         Media media =new Media();
+        media.setId(2L);
         media.setName(file.getOriginalFilename());
         media.setData(file.getBytes());
         media.setType(file.getContentType());
 
         media.setType(feedDTO.getType());
-        mediaRepoService.save(media);
+          Media media1=mediaRepoService.save(media);
+
+
+        System.out.println(media1);
+        applicationEventPublisher.publishEvent( new CustomSpringEvent(this));
         newFeed.setMedia(media);
+
         User newUser=userRepoService.findById(feedDTO.getUser()).get();
         newFeed.setUserId(newUser);
-        System.out.println(feedRepoService.save(newFeed));
-
-
-
+        newFeed=null;
+        Feed feed=feedRepoService.save(newFeed);
         System.out.println(media.toString());
-
-
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"media has been posted",""));
 
     }

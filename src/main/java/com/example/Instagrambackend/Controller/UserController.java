@@ -4,12 +4,13 @@ import com.example.Instagrambackend.DTO.LoginDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 import java.util.Objects;
 
 @RestController

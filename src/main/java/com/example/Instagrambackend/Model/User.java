@@ -4,14 +4,14 @@ package com.example.Instagrambackend.Model;
 
 import com.example.Instagrambackend.Constants.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -40,17 +40,18 @@ public class User implements UserDetails, CredentialsContainer {
 
     private Date dateOfBirth;
 
-    @Min(value = 1,message = "error")
+    @Min(value = 1, message = "error")
     @Max(value = 10)
     @Column(nullable = true)
     private Integer age;
 //    @Column(nullable = false)
 
-//    @NotEmpty(message = "error")
-    @NotBlank(message = "error")
+
+
+     @NotNull
     private String emailId;
- @Column(length = 10)
- @Size(max = 10,min = 10,message = "length of mobileNumber must be 10")
+    @Column(length = 10)
+    @Pattern(regexp = "^[0-9]]",message = "length of mobileNumber must be 10")
     private String mobileNumber;
 
     private Boolean isActive;
