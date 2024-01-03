@@ -1,5 +1,6 @@
 package com.example.Instagrambackend.Controller;
 
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import com.example.Instagrambackend.Api.FeedControllerApi;
 import com.example.Instagrambackend.DTO.FeedDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
@@ -59,7 +60,6 @@ public class FeedController implements FeedControllerApi {
 //        String feedType=feedDetails.get("feedType");
         if(!feedService.isValidUser(userId))
         {
-             ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"user not found",""));
          return "";
         }
         if(feedType.equals("public")) {
@@ -70,8 +70,7 @@ public class FeedController implements FeedControllerApi {
 
             String string = jsonObject1.toString();
 
-            return string;
-        }
+return  string;        }
         else if(feedType.equals("private"))
         {
             ResponseDTO object=feedService.getPrivateFeed(userId).getBody();
@@ -86,7 +85,7 @@ public class FeedController implements FeedControllerApi {
     }
 
     @Override
-    public List<FeedView> display() {
+    public ResponseEntity<ResponseDTO> display() {
         return feedService.display();
     }
 

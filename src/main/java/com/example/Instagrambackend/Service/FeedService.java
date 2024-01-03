@@ -21,5 +21,5 @@ public interface FeedService {
 
     public ResponseEntity<ResponseDTO> getPrivateFeed(Long user);
 
-    List<FeedView> display();
+    ResponseEntity<ResponseDTO> display();
 }

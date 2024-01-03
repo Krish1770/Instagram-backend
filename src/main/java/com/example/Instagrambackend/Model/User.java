@@ -50,8 +50,8 @@ public class User implements UserDetails, CredentialsContainer {
 
      @NotNull
     private String emailId;
-    @Column(length = 10)
-    @Pattern(regexp = "^[0-9]]",message = "length of mobileNumber must be 10")
+//    @Column(length = 10)
+//    @Pattern(regexp = "[0-9]]",message = "length of mobileNumber must be 10")
     private String mobileNumber;
 
     private Boolean isActive;

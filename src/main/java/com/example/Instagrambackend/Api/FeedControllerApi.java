@@ -22,9 +22,11 @@ public interface FeedControllerApi {
     @GetMapping("/view/{userId}/{feedType}")
 //    @Cacheable(value ="getFeed",key = "#userId+'_'+#feedType")
     public String getFeed(@PathVariable Long userId,@PathVariable String feedType);
+    //just for learning view concept
+
 //    public String getFeed(@PathVariable Map<String,String>feedDetails) throws IOException;
 
-    @GetMapping("/feedDetails")
-    public List<FeedView> display();
+    @GetMapping("/feedDetails/{userId}")
+    public  ResponseEntity<ResponseDTO> display();
 }
 

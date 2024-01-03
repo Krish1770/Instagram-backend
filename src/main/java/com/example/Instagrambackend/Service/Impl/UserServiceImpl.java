@@ -6,10 +6,8 @@ import com.example.Instagrambackend.DTO.LoginDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Repository.Service.UserRepoService;
-import com.example.Instagrambackend.Repository.UserRepository;
 import com.example.Instagrambackend.Service.UserService;
 import jakarta.validation.Valid;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,11 +50,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //
 //}
          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(HttpStatus.NOT_FOUND,"email Already Exist",""));
-
-
     }
-
-
     public ResponseEntity<ResponseDTO> deleteUser(Long userId) {
         Optional<User> tempUser=userRepoService.findById(userId);
 
@@ -65,21 +59,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             tempUser.get().setIsActive(false);
             userRepoService.save(tempUser.get());
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"User Deleted Successfully",userId));
-
-
         }
 
         System.out.println("service");
         throw new UserNotFoundException();
-
-
     }
     public User isUserValid(String email)
     {
         return userRepoService.findByEmailId(email);
     }
-
-
     public ResponseEntity<ResponseDTO> login(LoginDTO loginDTO,User user)
     {
            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,jwtService.generateToken(loginDTO.getEmail()),""));
@@ -87,7 +75,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 //       return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.NOT_FOUND,"invalid user",""));
     }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepoService.findByEmailId(email);

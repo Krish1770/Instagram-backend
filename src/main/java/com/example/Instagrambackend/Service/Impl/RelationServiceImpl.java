@@ -6,12 +6,9 @@ import com.example.Instagrambackend.DTO.SenderIdReceiverDTO;
 import com.example.Instagrambackend.Model.Relation;
 import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Model.UserKey;
-import com.example.Instagrambackend.Repository.RelationRepository;
 import com.example.Instagrambackend.Repository.Service.RelationRepoService;
 import com.example.Instagrambackend.Repository.Service.UserRepoService;
-import com.example.Instagrambackend.Repository.UserRepository;
 import com.example.Instagrambackend.Service.RelationService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -121,7 +118,7 @@ public class RelationServiceImpl implements RelationService {
         Optional<Relation> tempRelation = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getSender(), senderReceiverDTO.getReceiver());
   String action=senderReceiverDTO.getAction();
         System.out.println("requestService");
-        if (tempRelation == null) {
+        if (tempRelation .isEmpty()) {
             tempRelation = relationRepoService.findByUserKeySenderUserIdAndUserKeyReceiverUserId(senderReceiverDTO.getReceiver(), senderReceiverDTO.getSender());
 
         }
@@ -164,8 +161,8 @@ public class RelationServiceImpl implements RelationService {
             Relation newRelation = new Relation();
 
             UserKey newUserKey=new UserKey();
-//            newUserKey.setSender(userRepoService.findById(senderReceiverDTO.getSender()).get());
-//            newUserKey.setReceiver(userRepoService.findById(senderReceiverDTO.getReceiver()).get());
+            newUserKey.setSender(userRepoService.findById(senderReceiverDTO.getSender()).get());
+            newUserKey.setReceiver(userRepoService.findById(senderReceiverDTO.getReceiver()).get());
 
             newRelation.setUserKey(newUserKey);
 
@@ -316,9 +313,9 @@ public class RelationServiceImpl implements RelationService {
     }
 
     public ResponseEntity<ResponseDTO> friendsList(Long userId) {
-        User tempUser = userRepoService.findById(userId).get();
+        Optional<User> tempUser = userRepoService.findById(userId);
 
-        if (tempUser != null) {
+        if (tempUser.isPresent()) {
             List<Relation> friendList = relationRepoService.findByUserKeySenderUserIdOrUserKeyReceiverUserIdAndStatus(userId, userId, "accepted").get();
 
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "friend List returned", friendList));
@@ -328,9 +325,9 @@ public class RelationServiceImpl implements RelationService {
 
     public ResponseEntity<ResponseDTO> followersList(Long userId) {
 
-        User tempUser = userRepoService.findById(userId).get();
+       Optional<User> tempUser = userRepoService.findById(userId);
 
-        if (tempUser != null) {
+        if (tempUser.isPresent()) {
             List<Relation> followersList = relationRepoService.findByUserKeyReceiverUserIdAndFollowing(userId, true).get();
 
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "follow List returned", followersList));

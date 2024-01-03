@@ -28,7 +28,7 @@ public interface UserControllerApi {
 
 
 
-    @PostMapping("login")
+    @PostMapping("/login")
 //    @PreAuthorize("hasAuthority('ADMIN,'USER')")
      ResponseEntity<ResponseDTO> login(@RequestBody LoginDTO loginDTO);
 }

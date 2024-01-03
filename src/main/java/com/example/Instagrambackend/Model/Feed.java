@@ -19,7 +19,7 @@ import java.util.Date;
 
 public class Feed {
 
-    @ManyToOne(targetEntity = User.class,cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "userId",referencedColumnName = "userId")
     private User userId;
 

@@ -3,7 +3,6 @@ package com.example.Instagrambackend.Service.Impl;
 import com.example.Instagrambackend.DTO.FeedDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Model.*;
-import com.example.Instagrambackend.Repository.RelationRepository;
 import com.example.Instagrambackend.Repository.Service.*;
 import com.example.Instagrambackend.Service.FeedService;
 import jakarta.transaction.Transactional;
@@ -52,6 +51,8 @@ public class FeedServiceImpl implements FeedService {
     @Transactional
     public ResponseEntity<ResponseDTO> mediaUploadRequest(MultipartFile file,FeedDTO feedDTO) throws IOException {
 
+        System.out.println(file);
+        System.out.println("feedDTO"+feedDTO);
         Feed newFeed=new Feed();
 
 //        Feed newFeed=null;
@@ -73,14 +74,14 @@ public class FeedServiceImpl implements FeedService {
 
         System.out.println(media1);
         applicationEventPublisher.publishEvent( new CustomSpringEvent(this));
-        newFeed.setMedia(media);
+        newFeed.setMedia(media1);
 
         User newUser=userRepoService.findById(feedDTO.getUser()).get();
         newFeed.setUserId(newUser);
-        newFeed=null;
+//        newFeed=null;
         Feed feed=feedRepoService.save(newFeed);
         System.out.println(media.toString());
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"media has been posted",""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"media has been posted",feed));
 
     }
 
@@ -163,8 +164,10 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedView> display() {
-        return feedViewRepoService.displayFeedView();
+    public ResponseEntity<ResponseDTO> display() {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,"all feeds",""));
     }
 
 }
