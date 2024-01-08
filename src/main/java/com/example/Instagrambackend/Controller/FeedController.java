@@ -1,7 +1,7 @@
 package com.example.Instagrambackend.Controller;
 
 import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
-import com.example.Instagrambackend.Api.FeedControllerApi;
+import com.example.Instagrambackend.Api.FeedApi;
 import com.example.Instagrambackend.DTO.FeedDTO;
 import com.example.Instagrambackend.DTO.ResponseDTO;
 import com.example.Instagrambackend.Model.Feed;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class FeedController implements FeedControllerApi {
+public class FeedController implements FeedApi {
 
 
     @Autowired

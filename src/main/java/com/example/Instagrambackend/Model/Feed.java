@@ -44,5 +44,6 @@ public class Feed {
     @Column(name = "privacyType")
     private String privacyType;
 
+
 }
 

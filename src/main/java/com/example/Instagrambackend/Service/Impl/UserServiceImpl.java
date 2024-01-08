@@ -8,6 +8,7 @@ import com.example.Instagrambackend.Model.User;
 import com.example.Instagrambackend.Repository.Service.UserRepoService;
 import com.example.Instagrambackend.Service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User isUserValid(String email)
     {
         return userRepoService.findByEmailId(email);
+    }
+
+    public Optional<User> isUserValid(Long userId)
+    {
+        return userRepoService.findById(userId);
     }
     public ResponseEntity<ResponseDTO> login(LoginDTO loginDTO,User user)
     {

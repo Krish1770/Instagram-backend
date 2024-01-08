@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-public interface RelationControllerApi {
+public interface RelationApi {
 
 
     @PostMapping("/actionRequest")

@@ -29,6 +29,8 @@ public class User implements UserDetails, CredentialsContainer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
+    private String userName;
+
     private String accountType;
 
     @Enumerated(EnumType.STRING)
