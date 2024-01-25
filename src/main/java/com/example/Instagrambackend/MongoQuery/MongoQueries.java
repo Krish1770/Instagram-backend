@@ -14,10 +14,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Service
 public class MongoQueries{
 
-
-
     private final MongoTemplate mongoTemplate;
-
 
     @Autowired
     private MongoQueries(MongoTemplate mongoTemplate)

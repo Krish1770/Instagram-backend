@@ -1,7 +1,5 @@
 package com.example.Instagrambackend.Model;
 
-//import com.example.Instagrambackend.DTO.ResponseDTO;
-
 import com.example.Instagrambackend.Constants.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -52,8 +50,7 @@ public class User implements UserDetails, CredentialsContainer {
 
      @NotNull
     private String emailId;
-//    @Column(length = 10)
-//    @Pattern(regexp = "[0-9]]",message = "length of mobileNumber must be 10")
+
     private String mobileNumber;
 
     private Boolean isActive;
@@ -74,8 +71,6 @@ public class User implements UserDetails, CredentialsContainer {
     @Override
     public void eraseCredentials() {
     }
-
-
     @Override
     public String getUsername() {
         return emailId;
@@ -95,5 +90,4 @@ public class User implements UserDetails, CredentialsContainer {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
 }
